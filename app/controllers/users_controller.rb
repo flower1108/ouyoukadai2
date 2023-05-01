@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :ensure_correct_user, only: [:edit, :update]
   before_action :is_matching_login_user, only: [:edit, :update]
+  before_action :set_user, only: [:followings, :followers]
 
   def show
     @user = User.find(params[:id])
@@ -29,6 +30,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def followings
+    @users = @user.following_users
+  end
+
+  def followers
+    @users = @user.follower_users
+  end
+
   private
 
   def user_params
@@ -48,4 +57,9 @@ class UsersController < ApplicationController
       redirect_to books_path
     end
   end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
 end
